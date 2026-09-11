@@ -12,10 +12,11 @@ services:
       - DB_PASS: ${DB_PASSWORD}
     volumes:
       - ./public/:/var/www/localhost/htdocs
-    depends_on:
-      - db
     networks:
       - lamp-network
+    depends_on:
+      db:
+        condition: service_healthy
 
   db:
     image: mariadb:12
@@ -28,6 +29,12 @@ services:
       - db-data:/var/lib/mysql
     networks:
       - lamp-network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:5.2
@@ -41,7 +48,8 @@ services:
       # PMA_USER: ${DB_USER} 
       # PMA_PASSWORD: ${DB_PASSWORD}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
 volumes:
   db-data:
