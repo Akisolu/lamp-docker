@@ -9,7 +9,8 @@ Este proyecto proporciona un entorno LAMP local y ligero utilizando Docker Compo
 
 El objetivo principal es permitir el desarrollo local rápido de aplicaciones PHP sin necesidad de instalar Apache, PHP y MySQL/MariaDB directamente en la máquina anfitriona.
 
->[!NOTE]> Este proyecto fue desarrollado con fines de aprendizaje
+>[!NOTE] 
+> Este proyecto fue desarrollado con fines de aprendizaje
 
 <p align="center">
   <a href="https://github.com/Akisolu/lamp-docker/actions/workflows/docker-syntax-checker.yml">
