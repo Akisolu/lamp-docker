@@ -50,7 +50,7 @@ Antes de comenzar, asegúrate de tener:
 1. Clona o abre la carpeta del proyecto:
 
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/Akisolu/lamp-docker
 cd lamp-docker
 ```
 
