@@ -27,6 +27,9 @@ El objetivo principal es permitir el desarrollo local rápido de aplicaciones PH
 
 ```text
 .
+├── .github/
+│   └── workflows/
+│       └── docker-syntax-checker.yml
 ├── public/
 │ ├── index.php
 │ └── info.php

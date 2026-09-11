@@ -28,6 +28,9 @@ The main goal is to enable fast local development of PHP applications without ne
 
 ```text
 .
+├── .github/
+│   └── workflows/
+│       └── docker-syntax-checker.yml
 ├── public/
 │   ├── index.php
 │   └── info.php
@@ -37,6 +40,8 @@ The main goal is to enable fast local development of PHP applications without ne
 ├── README.md
 └── README.es.md
 ```
+
+[![Docker Syntax Checker](https://github.com/Akisolu/lamp-docker/actions/workflows/docker-syntax-checker.yml/badge.svg)](https://github.com/Akisolu/lamp-docker/actions/workflows/docker-syntax-checker.yml)
 
 ## Services
 
