@@ -1,6 +1,6 @@
 services:
   web:
-    image: my-web-app:latest
+    image: server:latest
     ports:
       - "80:80"
     environment:
