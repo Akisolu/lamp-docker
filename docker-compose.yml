@@ -5,7 +5,7 @@ services:
     ports:
       - "80:80"
     environment:
-      - ENV=production
+      - ENV=${ENV}
     volumes:
       - ./public/:/var/www/localhost/htdocs
     depends_on:
