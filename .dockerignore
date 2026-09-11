@@ -1,2 +1,3 @@
 .git/
-index.php
+public/
+docker-compose.yml
