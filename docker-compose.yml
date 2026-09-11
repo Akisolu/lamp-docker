@@ -45,8 +45,8 @@ services:
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
-      # PMA_USER: ${DB_USER} 
-      # PMA_PASSWORD: ${DB_PASSWORD}
+      # PMA_USER: ${DB_USER} # default user that will use phpmyadmin to log in
+      # PMA_PASSWORD: ${DB_PASSWORD} # default password that phpmyadmin will use to log in
     depends_on:
       db:
         condition: service_healthy
