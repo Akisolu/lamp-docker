@@ -34,6 +34,7 @@ The main goal is to enable fast local development of PHP applications without ne
 .
 ├── .github/
 │   └── workflows/
+|       ├── docker-release.yml
 │       └── docker-syntax-checker.yml
 ├── public/
 │   ├── index.php
