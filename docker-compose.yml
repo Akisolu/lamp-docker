@@ -6,7 +6,7 @@ services:
     environment:
       - ENV=production
     volumes:
-      - .:./public/
+      - ./public/:/var/www/localhost/htdocs
     depends_on:
       - db
 
@@ -23,7 +23,7 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
-      - "8080:8000"
+      - "8080:80"
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
