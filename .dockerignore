@@ -1,3 +1,5 @@
 .git/
 public/
 docker-compose.yml
+README.md
+README.es.md
