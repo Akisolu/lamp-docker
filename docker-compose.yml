@@ -1,5 +1,6 @@
 services:
   web:
+    build: .
     image: server:latest
     ports:
       - "80:80"
