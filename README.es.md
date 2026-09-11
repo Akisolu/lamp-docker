@@ -34,15 +34,18 @@ El objetivo principal es permitir el desarrollo local rápido de aplicaciones PH
 .
 ├── .github/
 │   └── workflows/
-|       ├── docker-release.yml
+│       ├── docker-release.yml
 │       └── docker-syntax-checker.yml
 ├── public/
-│ ├── index.php
-│ └── info.php
-|── .dockerignore (opcional)
+│   ├── index.php
+│   └── info.php
+├── .dockerignore
+├── .env.example
+├── .gitignore
 ├── docker-compose.yml
 ├── Dockerfile
-└── README.md
+├── README.md
+└── README.es.md
 ```
 
 ## Servicios
@@ -51,12 +54,15 @@ El objetivo principal es permitir el desarrollo local rápido de aplicaciones PH
 | --- | --- | --- | --- |
 | web | imagen personalizada creada a partir del Dockerfile | 80:80 | Servidor web Apache para archivos PHP |
 | db | mariadb:12 | solo interno | Base de datos MariaDB |
-| phpmyadmin | phpmyadmin/phpmyadmin:5.2 | 8080:80 | Interfaz de administración de bases de datos | ## Tecnologías utilizadas
+| phpmyadmin | phpmyadmin/phpmyadmin:5.2 | 8080:80 | Interfaz de administración de bases de datos |
+
+## Tecnologías utilizadas
 
 - PHP 8.3 con Apache 2
 - Imagen base Alpine Linux
 - Motor de base de datos MariaDB
 - Docker Compose para la orquestación
+- Configuración basada en variables de entorno con `.env.example`
 
 ## Requisitos previos
 
@@ -65,6 +71,28 @@ Antes de comenzar, asegúrate de tener:
 - Docker instalado
 - Docker Compose instalado
 - Puertos 80 y 8080 disponibles en tu máquina
+
+## Configuración de entorno
+
+Este proyecto usa variables de entorno para configurar la aplicación y la base de datos.
+
+1. Copia el archivo de ejemplo:
+
+```bash
+cp .env.example .env
+```
+
+2. Ajusta los valores en `.env`:
+
+```env
+ENV=
+DB_ROOT_PASSWORD=
+DB_USER=
+DB_PASSWORD=
+DB_DATABASE=
+```
+
+El archivo `docker-compose.yml` usa estos valores para MariaDB y para el contenedor web, mientras que la página PHP de ejemplo los lee en tiempo de ejecución desde el entorno.
 
 ## Inicio rápido
 
@@ -88,7 +116,7 @@ docker compose up --build -d
 
 ## Configuración predeterminada de la base de datos
 
-El entorno está configurado con los siguientes valores:
+Los valores predeterminados en `.env.example` están pensados para usarse en desarrollo local y se pueden personalizar:
 
 - Nombre de la base de datos: `mydatabase`
 - Usuario de la base de datos: `user`
@@ -97,7 +125,7 @@ El entorno está configurado con los siguientes valores:
 - Host: `db` (red interna de Docker)
 - Puerto: `3306`
 
-Estos valores están definidos en el archivo `docker-compose.yml` y son utilizados por el script PHP de ejemplo en `public/index.php`.
+Estos valores se inyectan mediante variables de entorno en `docker-compose.yml` y luego son consumidos por el script PHP de ejemplo en `public/index.php`.
 
 ## Comportamiento del ejemplo en PHP
 
@@ -107,6 +135,16 @@ El archivo `public/index.php` intenta conectarse al servidor MariaDB utilizando 
 - o un mensaje de error de base de datos si la conexión falla
 
 Esto es útil para verificar que los contenedores web y de base de datos pueden comunicarse correctamente.
+
+## Comportamiento de servicios y health checks
+
+Las actualizaciones recientes añadieron un chequeo de salud al contenedor de MariaDB y mejoraron las dependencias entre servicios:
+
+- El servicio `web` espera a que la base de datos esté saludable antes de iniciar.
+- El servicio `db` ejecuta una comprobación de disponibilidad con `healthcheck.sh`.
+- El servicio `phpmyadmin` también espera a que `db` esté listo antes de arrancar.
+
+Esto hace el inicio del stack más fiable en Docker Compose.
 
 ## Comandos útiles
 
@@ -146,16 +184,17 @@ Los datos de la base de datos se persisten utilizando un volumen con nombre de D
 
 ```yaml
 volumes:
-    db-data:
+  db-data:
 ```
 
 Esto garantiza que los datos de MariaDB permanezcan disponibles incluso si el contenedor se reinicia o se recrea.
 
 ## Notas
 
-- La raíz web se monta desde `./public/` en el directorio raíz de documentos de Apache. 
+- La raíz web se monta desde `./public/` en el directorio raíz de documentos de Apache.
 - La imagen de Docker personalizada instala las extensiones de PHP necesarias, incluyendo el soporte para MySQL/MariaDB.
 - La red de Compose `lamp-network` conecta internamente los servicios web y de base de datos.
+- El proyecto ahora soporta configuración a través de variables de entorno para credenciales de base de datos y valores por defecto de phpMyAdmin.
 
 ## Solución de problemas
 
@@ -173,7 +212,7 @@ A continuación, revise los registros (logs):
 docker compose logs db
 ```
 
-Confirme que las credenciales de la base de datos en `docker-compose.yml` coincidan con las utilizadas por la aplicación.
+Confirme que los valores en `.env` coincidan con las credenciales esperadas por la aplicación y por Docker Compose.
 
 ### Puerto ya en uso
 
@@ -181,7 +220,7 @@ Si el puerto 80 u 8080 ya está ocupado, cambie la asignación de puertos del ho
 
 ```yaml
 ports:
-- "8081:80"
+  - "8081:80"
 ```
 
 Luego, utilice la nueva URL en su navegador.

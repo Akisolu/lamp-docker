@@ -34,12 +34,14 @@ The main goal is to enable fast local development of PHP applications without ne
 .
 ├── .github/
 │   └── workflows/
-|       ├── docker-release.yml
+│       ├── docker-release.yml
 │       └── docker-syntax-checker.yml
 ├── public/
 │   ├── index.php
 │   └── info.php
-├── .dockerignore (optional)
+├── .dockerignore
+├── .env.example
+├── .gitignore
 ├── docker-compose.yml
 ├── Dockerfile
 ├── README.md
@@ -60,6 +62,7 @@ The main goal is to enable fast local development of PHP applications without ne
 - Alpine Linux base image
 - MariaDB database engine
 - Docker Compose for orchestration
+- Environment-variable-based configuration with `.env.example`
 
 ## Prerequisites
 
@@ -68,6 +71,28 @@ Before you begin, make sure you have:
 - Docker installed
 - Docker Compose installed
 - Ports 80 and 8080 available on your machine
+
+## Environment configuration
+
+This project uses environment variables to configure the application and the database.
+
+1. Copy the example file:
+
+```bash
+cp .env.example .env
+```
+
+2. Update the values in `.env`:
+
+```env
+ENV=
+DB_ROOT_PASSWORD=
+DB_USER=
+DB_PASSWORD=
+DB_DATABASE=
+```
+
+The `docker-compose.yml` file uses these values for MariaDB and the web container, while the sample PHP page reads them through the environment at runtime.
 
 ## Quick start
 
@@ -91,7 +116,7 @@ docker compose up --build -d
 
 ## Default database configuration
 
-The environment is configured with the following values:
+The default values in `.env.example` are intended to be customized for local development:
 
 - Database name: `mydatabase`
 - Database user: `user`
@@ -100,7 +125,7 @@ The environment is configured with the following values:
 - Host: `db` (internal Docker network)
 - Port: `3306`
 
-These values are defined in the `docker-compose.yml` file and are used by the sample PHP script in `public/index.php`.
+These values are injected via environment variables in `docker-compose.yml` and then consumed by the sample PHP script in `public/index.php`.
 
 ## PHP example behavior
 
@@ -110,6 +135,16 @@ The `public/index.php` file attempts to connect to the MariaDB server using PDO 
 - or a database error message if the connection fails
 
 This is useful for verifying that the web and database containers can communicate correctly.
+
+## Service behavior and health checks
+
+Recent updates added a health check to the MariaDB container and improved service dependencies:
+
+- The `web` service waits for the database to be healthy before starting.
+- The `db` service runs a MariaDB readiness check using `healthcheck.sh`.
+- The `phpmyadmin` service also waits for `db` to be ready before starting.
+
+This makes the startup sequence more reliable in Docker Compose.
 
 ## Useful commands
 
@@ -159,6 +194,7 @@ This ensures that MariaDB data remains available even if the container is restar
 - The web root is mounted from `./public/` into Apache's document root.
 - The custom Docker image installs the required PHP extensions, including support for MySQL/MariaDB.
 - The Compose network `lamp-network` connects the web and database services internally.
+- The project now supports environment-variable configuration for database credentials and phpMyAdmin defaults.
 
 ## Troubleshooting
 
@@ -176,7 +212,7 @@ Then inspect the logs:
 docker compose logs db
 ```
 
-Confirm that the database credentials in `docker-compose.yml` match those used by the application.
+Confirm that the values in `.env` match the credentials expected by the application and Docker Compose.
 
 ### Port already in use
 
