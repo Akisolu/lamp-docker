@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.20
 
 # Instalar Apache, PHP y herramientas en una sola capa optimizada
 RUN apk add --no-cache \
