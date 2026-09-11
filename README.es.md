@@ -12,6 +12,10 @@ El objetivo principal es permitir el desarrollo local rápido de aplicaciones PH
 >[!NOTE]> Este proyecto fue desarrollado con fines de aprendizaje
 
 <p align="center">
+  <a href="https://github.com/Akisolu/lamp-docker/actions/workflows/docker-syntax-checker.yml">
+    <img src="https://github.com/Akisolu/lamp-docker/actions/workflows/docker-syntax-checker.yml/badge.svg" alt="Docker Build & Test" />
+  </a>
+  <br><br>
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
   <img src="https://img.shields.io/badge/Alpine_Linux-0D597F?style=for-the-badge&logo=alpine-linux&logoColor=white" alt="Alpine Linux" />
   <img src="https://img.shields.io/badge/Apache-D22128?style=for-the-badge&logo=apache&logoColor=white" alt="Apache" />
