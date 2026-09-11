@@ -5,11 +5,11 @@ services:
     ports:
       - "80:80"
     environment:
-      - ENV=${ENV}
-      - DB_HOST: db
-      - DB_NAME: ${DB_DATABASE}
-      - DB_USER: ${DB_USER}
-      - DB_PASS: ${DB_PASSWORD}
+      ENV: ${ENV}
+      DB_HOST: db
+      DB_NAME: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASSWORD}
     volumes:
       - ./public/:/var/www/localhost/htdocs
     networks:
