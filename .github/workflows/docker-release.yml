@@ -1,0 +1,39 @@
+name: Docker Release Asset
+
+on:
+  release:
+    types: [published] # Runs automatically when you publish a release on GitHub
+
+jobs:
+  build-and-attach:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Permission to attach files to the Release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 1. Build the image and save it as a .tar file.
+      - name: Build Docker image to tar archive
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          outputs: type=docker,dest=lamp-docker-image.tar
+          tags: akisolu/lamp-docker:${{ github.ref_name }}
+
+      # 2. Compress the image to reduce the file size
+      - name: Compress image archive
+        run: gzip -9 lamp-docker-image.tar
+
+      # 3. Attach the compressed image to the Release Assets
+      - name: Upload image to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: lamp-docker-image.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
