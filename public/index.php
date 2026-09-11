@@ -1,9 +1,8 @@
 <?php
-// Configuración de la base de datos (según docker-compose.yml)
-$db_host = 'db';
-$db_name = 'mydatabase';
-$db_user = 'user';
-$db_pass = 'password';
+$db_host = getenv('DB_HOST') ?: 'db';
+$db_name = getenv('DB_NAME') ?: 'mydatabase';
+$db_user = getenv('DB_USER') ?: 'lamp';
+$db_pass = getenv('DB_PASS') ?: 'lamp';
 
 $db_connected = false;
 $db_error = '';
