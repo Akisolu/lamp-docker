@@ -9,6 +9,8 @@ services:
       - ./public/:/var/www/localhost/htdocs
     depends_on:
       - db
+    networks:
+      - lamp-network
 
   db:
     image: mariadb:12
@@ -19,11 +21,15 @@ services:
       MYSQL_DATABASE: mydatabase
     volumes:
       - db-data:/var/lib/mysql
+    networks:
+      - lamp-network
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.2
     ports:
       - "8080:80"
+    networks:
+      - lamp-network
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
@@ -32,3 +38,7 @@ services:
 
 volumes:
   db-data:
+
+networks:
+  lamp-network: 
+    driver: bridge
