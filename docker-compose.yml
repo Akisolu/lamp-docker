@@ -16,10 +16,10 @@ services:
   db:
     image: mariadb:12
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: mydatabase
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
     volumes:
       - db-data:/var/lib/mysql
     networks:
@@ -34,6 +34,8 @@ services:
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
+      PMA_USER: ${DB_USER} 
+      PMA_PASSWORD: ${DB_PASSWORD}
     depends_on:
       - db
 
