@@ -18,6 +18,8 @@ RUN apk add --no-cache \
     php83-phar \
     php83-intl \
     && mkdir -p /var/www/localhost/htdocs
+    
+WORKDIR /var/www/localhost/htdocs
 
 EXPOSE 80
 
