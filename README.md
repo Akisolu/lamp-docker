@@ -116,25 +116,34 @@ docker compose up --build -d
 
 ## Default database configuration
 
-The default values in `.env.example` are intended to be customized for local development:
+The database is configured through the variables in your `.env` file (copy them from `.env.example`).
+Use the values below for local development, or replace them with your own:
 
-- Database name: `mydatabase`
-- Database user: `user`
-- Database password: `password`
-- Root password: `password`
-- Host: `db` (internal Docker network)
-- Port: `3306`
+| Variable          | Value        | Description                          |
+| ----------------- | ------------ | ------------------------------------ |
+| `DB_ROOT_PASSWORD`| `password`   | MariaDB root password                |
+| `DB_USER`         | `lamp`       | Application user                     |
+| `DB_PASSWORD`     | `lamp`   | Password for `DB_USER`                   |
+| `DB_DATABASE`     | `mydatabase` | Database name                        |
+
+> **Note:** The host (`db`) and port (`3306`) cannot be configured using this method.  
+> They are fixed by the internal Docker network between containers.
 
 These values are injected via environment variables in `docker-compose.yml` and then consumed by the sample PHP script in `public/index.php`.
 
-## PHP example behavior
+## Status dashboard
 
-The `public/index.php` file attempts to connect to the MariaDB server using PDO and displays:
+The `public/index.php` file is a visual status dashboard that verifies the stack is working. It displays two cards:
 
-- `Successful connection to the database (MariaDB)!`
-- or a database error message if the connection fails
+- **Web Server**: Apache version, PHP version, and document root, with a running/online indicator.
+- **Database**: connection status to MariaDB via PDO (engine, host, database name), showing a *Connected* or *Disconnected* badge with the error details if the connection fails.
 
-This is useful for verifying that the web and database containers can communicate correctly.
+This makes it easy to verify at a glance that:
+
+1. The Apache container is serving PHP correctly.
+2. The web and database containers can communicate over the internal network.
+
+The page also includes quick links to phpMyAdmin and to `info.php` (full `phpinfo()` output).
 
 ## Service behavior and health checks
 
@@ -194,7 +203,7 @@ This ensures that MariaDB data remains available even if the container is restar
 - The web root is mounted from `./public/` into Apache's document root.
 - The custom Docker image installs the required PHP extensions, including support for MySQL/MariaDB.
 - The Compose network `lamp-network` connects the web and database services internally.
-- The project now supports environment-variable configuration for database credentials and phpMyAdmin defaults.
+- The project supports environment-variable configuration for database credentials and phpMyAdmin defaults.
 
 ## Troubleshooting
 

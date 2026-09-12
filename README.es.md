@@ -116,25 +116,32 @@ docker compose up --build -d
 
 ## Configuración predeterminada de la base de datos
 
-Los valores predeterminados en `.env.example` están pensados para usarse en desarrollo local y se pueden personalizar:
+La base de datos se configura mediante las variables de tu archivo `.env` (cópialas desde `.env.example`).
+Utiliza los siguientes valores para el desarrollo local o sustitúyelos por los tuyos propios:
 
-- Nombre de la base de datos: `mydatabase`
-- Usuario de la base de datos: `user`
-- Contraseña de la base de datos: `password`
-- Contraseña de root: `password`
-- Host: `db` (red interna de Docker)
-- Puerto: `3306`
+| Variable          | Valor        | Descripción                          |
+| ----------------- | ------------ | ------------------------------------ |
+| `DB_ROOT_PASSWORD`| `password`   | Contraseña de root de MariaDB        |
+| `DB_USER`         | `lamp`       | Usuario de la aplicación             |
+| `DB_PASSWORD`     | `lamp`       | Contraseña para `DB_USER`            |
+| `DB_DATABASE`     | `mydatabase` | Nombre de la base de datos           |
 
-Estos valores se inyectan mediante variables de entorno en `docker-compose.yml` y luego son consumidos por el script PHP de ejemplo en `public/index.php`.
+> **Nota:** El host (`db`) y el puerto (`3306`) no se pueden configurar mediante este método.
+> Vienen determinados por la red interna de Docker entre contenedores.
 
-## Comportamiento del ejemplo en PHP
+## Panel de estado
 
-El archivo `public/index.php` intenta conectarse al servidor MariaDB utilizando PDO y muestra:
+El archivo `public/index.php` es un panel visual de estado que verifica el funcionamiento de la pila tecnológica. Muestra dos tarjetas:
 
-- `Successful connection to the database (MariaDB)!`
-- o un mensaje de error de base de datos si la conexión falla
+- **Servidor web**: versión de Apache, versión de PHP y directorio raíz del documento (*document root*), junto con un indicador de estado (en ejecución/en línea).
+- **Base de datos**: estado de la conexión a MariaDB mediante PDO (motor, host, nombre de la base de datos), mostrando una etiqueta de *Conectado* o *Desconectado* y los detalles del error si la conexión falla.
 
-Esto es útil para verificar que los contenedores web y de base de datos pueden comunicarse correctamente.
+Esto permite verificar de un vistazo que:
+
+1. El contenedor de Apache está procesando PHP correctamente.
+2. Los contenedores web y de base de datos pueden comunicarse a través de la red interna.
+
+La página también incluye enlaces rápidos a phpMyAdmin y a `info.php` (la salida completa de `phpinfo()`).
 
 ## Comportamiento de servicios y health checks
 
@@ -194,7 +201,7 @@ Esto garantiza que los datos de MariaDB permanezcan disponibles incluso si el co
 - La raíz web se monta desde `./public/` en el directorio raíz de documentos de Apache.
 - La imagen de Docker personalizada instala las extensiones de PHP necesarias, incluyendo el soporte para MySQL/MariaDB.
 - La red de Compose `lamp-network` conecta internamente los servicios web y de base de datos.
-- El proyecto ahora soporta configuración a través de variables de entorno para credenciales de base de datos y valores por defecto de phpMyAdmin.
+- El proyecto soporta configuración a través de variables de entorno para credenciales de base de datos y valores por defecto de phpMyAdmin.
 
 ## Solución de problemas
 
