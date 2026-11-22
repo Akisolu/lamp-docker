@@ -1,5 +1,13 @@
 # LAMP Project with Docker
 
+**What it does:** Starts a complete PHP web server plus a database with one command using Docker, without installing anything on your machine.  
+**Why it matters:** Installing and configuring Apache, PHP and MariaDB by hand is slow and error-prone.
+
+**Qué hace:** Inicia un servidor web PHP completo junto con su base de datos con un solo comando usando Docker, sin instalar nada en tu computadora.  
+**Por qué importa:** Instalar y configurar Apache, PHP y MariaDB a mano es lento y propenso a errores.
+
+> 📄 Versión completa en español: [README.es.md](README.es.md)
+
 This project provides a lightweight local LAMP environment using Docker Compose. It includes:
 
 - Apache + PHP 8.3
